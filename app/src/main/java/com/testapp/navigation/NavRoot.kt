@@ -35,10 +35,6 @@ fun NavRoot(
     ) {
         composable<UploadScreenUi> {
             UploadScreen(goToMainScreen = {
-                vm.loadQuestions(context = context)
-                coroutineScope.launch {
-                    mydelay()
-                }
                 navController.navigate(MainScreenUi)
             })
         }
@@ -46,8 +42,4 @@ fun NavRoot(
             MainScreen()
         }
     }
-}
-
-suspend fun mydelay(){
-    delay(1000)
 }
