@@ -3,8 +3,10 @@ package com.testapp.presentation.mainscreen
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.BorderStroke
@@ -21,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -54,12 +57,17 @@ fun MainScreen(vm: TestViewModel = viewModel()) {
 
 
     Scaffold(topBar = {
+        val animatedProgress by animateFloatAsState(
+            targetValue = count.toFloat()/size,
+            animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+        )
+
         CenterAlignedTopAppBar(
             modifier = Modifier,
             title = {
                 LinearProgressIndicator(color = MaterialTheme.colorScheme.primary,
                     trackColor = MaterialTheme.colorScheme.onPrimary,
-                    progress = { count.toFloat() / size })
+                    progress = { animatedProgress })
             },
             actions = {
                 Text(text = "${count}/${size.toInt()}")
@@ -74,8 +82,7 @@ fun MainScreen(vm: TestViewModel = viewModel()) {
     }, floatingActionButton = {
         AnimatedVisibility(
             visible = count == size,
-            enter = slideInHorizontally() + expandHorizontally(expandFrom = Alignment.End)
-                    + fadeIn(),
+            enter = scaleIn() + fadeIn(),
         ) {
             Button(
                 onClick = {        },
