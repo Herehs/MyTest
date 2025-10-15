@@ -24,16 +24,16 @@ fun ResultsScreen(){
             .background(color = MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ){
-        var currentProgress by remember { mutableStateOf(0.1f) }
+        var currentProgress by remember { mutableStateOf(0f) }
         val animatedProgress by animateFloatAsState(
-            targetValue = 1f,
+            targetValue = currentProgress,
             animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
         )
 
         CircularIndicator(
             color = MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.onPrimary,
-            progress = {currentProgress},
+            progress = {animatedProgress},
             gapSize = 20f
         ){
             Text("test")
