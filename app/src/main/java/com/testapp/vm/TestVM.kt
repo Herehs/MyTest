@@ -45,7 +45,7 @@ class TestViewModel(): ViewModel(){
     fun onAnswerSelected(questionId: Int, answer: String){
         val answers = _userSelected.value.toMutableMap()
         answers[questionId] = answer
-        _userSelected.value = answers
+        _userSelected.update { answers }
     }
 
     fun checkAnswers(){

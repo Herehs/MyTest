@@ -62,7 +62,7 @@ fun DrawScope.background(backgroundColor: Color, componentSize: Size, width: Flo
     drawArc(
         size = size,
         color = backgroundColor,
-        style = Stroke(width = width, cap = StrokeCap.Round),
+        style = Stroke(width = width, cap = StrokeCap.Square),
         topLeft = Offset(
             x = (size.width - componentSize.width) / 2f,
             y = (size.height - componentSize.height) / 2f
@@ -77,7 +77,7 @@ fun DrawScope.foreground(foregroundColor: Color, componentSize: Size, width: Flo
     drawArc(
         size = size,
         color = foregroundColor,
-        style = Stroke(width = width, cap = StrokeCap.Round),
+        style = Stroke(width = width, cap = StrokeCap.Square),
         topLeft = Offset(
             x = (size.width - componentSize.width) / 2f,
             y = (size.height - componentSize.height) / 2f
