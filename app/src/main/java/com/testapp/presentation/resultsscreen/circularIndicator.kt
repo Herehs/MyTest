@@ -42,9 +42,9 @@ fun CircularIndicator(
     Column(modifier = Modifier
         .size(indicatorSize)
         .drawBehind {
-            background(backgroundColor = color, componentSize = size, width = indicatorWidth)
+            background(backgroundColor = trackColor, componentSize = size, width = indicatorWidth)
             foreground(
-                foregroundColor = trackColor,
+                foregroundColor = color,
                 componentSize = size,
                 width = foregroundWidth,
                 angle = currProgress

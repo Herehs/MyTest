@@ -23,6 +23,9 @@ class TestViewModel(): ViewModel(){
     private val _userSelected = MutableStateFlow<Map<Int, String>>(emptyMap())
     val userSelected: StateFlow<Map<Int, String>> = _userSelected.asStateFlow()
 
+    private val _correctAnswers = MutableStateFlow<Int>(0)
+    val correctAnswers: StateFlow<Int> = _correctAnswers.asStateFlow()
+
     fun increaseCount(id: Int){
         val answers = _userSelected.value.toMutableMap()
         if(id !in answers) {
@@ -31,12 +34,30 @@ class TestViewModel(): ViewModel(){
     }
 
     fun loadQuestions(context: Context){
-        _quiz.update { parseQuestions(loadJsonFromRaw(context = context, resourceId = R.raw.questions)) }
+        val newQuiz = parseQuestions(loadJsonFromRaw(context, R.raw.questions))
+        _quiz.update {
+            it.copy(
+                questions = newQuiz.questions
+            )
+        }
     }
 
     fun onAnswerSelected(questionId: Int, answer: String){
         val answers = _userSelected.value.toMutableMap()
         answers[questionId] = answer
         _userSelected.value = answers
+    }
+
+    fun checkAnswers(){
+        val answer = _userSelected.value.toMutableMap()
+        _quiz.value.questions.forEachIndexed { index, question ->
+            println(question.answers[question.correctAnswer])
+            println(answer)
+
+            if(question.answers[question.correctAnswer] == answer[index]){
+                println("proshlo")
+                _correctAnswers.update { it + 1 }
+            }
+        }
     }
 }
