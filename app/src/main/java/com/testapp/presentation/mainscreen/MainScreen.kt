@@ -2,25 +2,19 @@ package com.testapp.presentation.mainscreen
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
@@ -31,8 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,7 +35,10 @@ import com.testapp.vm.TestViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun MainScreen(vm: TestViewModel = viewModel()) {
+fun MainScreen(
+    vm: TestViewModel = viewModel(),
+    goToResultScreen: () -> Unit
+) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         vm.loadQuestions(context)
@@ -85,26 +80,33 @@ fun MainScreen(vm: TestViewModel = viewModel()) {
             enter = scaleIn() + fadeIn(),
         ) {
             Button(
-                onClick = {        },
+                onClick = {goToResultScreen()},
                 border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.secondary),
             ) {
                 Text(text = "Завершить", style = MaterialTheme.typography.bodyLarge)
             }
         }
-    }){ innerPadding ->
+    }, floatingActionButtonPosition = FabPosition.Center
+    ){ innerPadding ->
+
+        val userSelected by vm.userSelected.collectAsState()
+
         LazyColumn(modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding),
             state = rememberLazyListState(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(quiz.questions){ question ->
+            itemsIndexed(quiz.questions){ index, question ->
                 TestCard(que = question,
-                    onSelect = {selected -> if(selected) vm.increaseCount()}
+                    selectedAnswer = userSelected[index] ,
+                    onAnswerSelect = { currAnswer ->
+                        vm.increaseCount(index)
+                        vm.onAnswerSelected(index, currAnswer)
+                    },
+                    click = {}
                 )
             }
         }
-
     }
-
 }
