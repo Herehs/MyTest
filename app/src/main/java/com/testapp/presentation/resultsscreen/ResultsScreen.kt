@@ -29,9 +29,6 @@ fun ResultsScreen(vm: TestViewModel = viewModel()){
             .background(color = MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ){
-        LaunchedEffect(true) {
-            vm.checkAnswers()
-        }
         val correctAnswersCount by vm.correctAnswers.collectAsState()
 
         var currentProgress by remember { mutableStateOf(0f) }

@@ -35,6 +35,7 @@ class TestViewModel(): ViewModel(){
 
     fun loadQuestions(context: Context){
         val newQuiz = parseQuestions(loadJsonFromRaw(context, R.raw.questions))
+        println("Loaded quiz: ${newQuiz.questions.size} questions")
         _quiz.update {
             it.copy(
                 questions = newQuiz.questions
@@ -43,15 +44,17 @@ class TestViewModel(): ViewModel(){
     }
 
     fun onAnswerSelected(questionId: Int, answer: String){
-        val answers = _userSelected.value.toMutableMap()
-        answers[questionId] = answer
-        _userSelected.update { answers }
+        println("onAnswerSelected called — questionId=$questionId, answer=$answer")
+        val currAnswers = _userSelected.value.toMap()
+        val answers = mapOf(questionId to answer)
+        _userSelected.update { currAnswers + answers }
+        println("Selected: ${_userSelected.value}")
     }
 
     fun checkAnswers(){
-        val answer = _userSelected.value.toMutableMap()
+        val answer = _userSelected.value
         _quiz.value.questions.forEachIndexed { index, question ->
-            println(question.answers[question.correctAnswer])
+            println(question.answers)
             println(answer)
 
             if(question.answers[question.correctAnswer] == answer[index]){
@@ -59,5 +62,6 @@ class TestViewModel(): ViewModel(){
                 _correctAnswers.update { it + 1 }
             }
         }
+        println(_correctAnswers.value)
     }
 }

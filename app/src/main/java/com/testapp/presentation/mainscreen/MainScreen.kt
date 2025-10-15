@@ -80,7 +80,10 @@ fun MainScreen(
             enter = scaleIn() + fadeIn(),
         ) {
             Button(
-                onClick = {goToResultScreen()},
+                onClick = {
+                    goToResultScreen()
+                    vm.checkAnswers()
+                },
                 border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.secondary),
             ) {
                 Text(text = "Завершить", style = MaterialTheme.typography.bodyLarge)
