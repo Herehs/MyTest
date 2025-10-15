@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
             TestTheme {
                 Scaffold(modifier = Modifier.Companion.fillMaxSize()) { padding ->
                     padding
-                    NavRoot()
+                    NavRoot(vm = viewModel)
                 }
             }
         }

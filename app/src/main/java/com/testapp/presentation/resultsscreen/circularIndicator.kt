@@ -19,6 +19,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +48,8 @@ fun CircularIndicator(
                 foregroundColor = color,
                 componentSize = size,
                 width = foregroundWidth,
-                angle = currProgress
+                angle = currProgress,
+                gapSize = gapSize
             )
         },
         verticalArrangement = Arrangement.Center,
@@ -62,7 +64,7 @@ fun DrawScope.background(backgroundColor: Color, componentSize: Size, width: Flo
     drawArc(
         size = size,
         color = backgroundColor,
-        style = Stroke(width = width, cap = StrokeCap.Square),
+        style = Stroke(width = width, cap = StrokeCap.Butt),
         topLeft = Offset(
             x = (size.width - componentSize.width) / 2f,
             y = (size.height - componentSize.height) / 2f
@@ -73,17 +75,17 @@ fun DrawScope.background(backgroundColor: Color, componentSize: Size, width: Flo
     )
 }
 
-fun DrawScope.foreground(foregroundColor: Color, componentSize: Size, width: Float, angle: Float){
+fun DrawScope.foreground(foregroundColor: Color, componentSize: Size, width: Float, angle: Float, gapSize: Float){
     drawArc(
         size = size,
         color = foregroundColor,
-        style = Stroke(width = width, cap = StrokeCap.Square),
+        style = Stroke(width = width, cap = StrokeCap.Butt, join = StrokeJoin.Miter, miter = 0.1f),
         topLeft = Offset(
             x = (size.width - componentSize.width) / 2f,
             y = (size.height - componentSize.height) / 2f
         ),
-        startAngle = 72f + 90f,
-        sweepAngle = angle,
+        startAngle = 72f + 90f + gapSize/20,
+        sweepAngle = angle - gapSize/20,
         useCenter = false
     )
 

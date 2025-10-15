@@ -22,7 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.testapp.vm.TestViewModel
 
 @Composable
-fun ResultsScreen(vm: TestViewModel = viewModel()){
+fun ResultsScreen(vm: TestViewModel){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -30,10 +30,17 @@ fun ResultsScreen(vm: TestViewModel = viewModel()){
         contentAlignment = Alignment.Center
     ){
         val correctAnswersCount by vm.correctAnswers.collectAsState()
+        val quiz by vm.quiz.collectAsState()
+        val size = quiz.questions.size
+
+        var startAnimation by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            startAnimation = true
+        }
 
         var currentProgress by remember { mutableStateOf(0f) }
         val animatedProgress by animateFloatAsState(
-            targetValue = currentProgress,
+            targetValue = if(startAnimation){ correctAnswersCount.toFloat() / size }else 0f,
             animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
         )
 
@@ -45,8 +52,7 @@ fun ResultsScreen(vm: TestViewModel = viewModel()){
             indicatorSize = 300.dp,
             indicatorWidth = 150f
         ){
-            Text("${correctAnswersCount}", style = MaterialTheme.typography.headlineLarge)
-            Button(onClick = {currentProgress += 0.1f}) { }
+            Text("${correctAnswersCount}/${size}", style = MaterialTheme.typography.headlineLarge)
         }
     }
 }

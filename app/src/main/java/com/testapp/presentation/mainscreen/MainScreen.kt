@@ -36,7 +36,7 @@ import com.testapp.vm.TestViewModel
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
-    vm: TestViewModel = viewModel(),
+    vm: TestViewModel,
     goToResultScreen: () -> Unit
 ) {
     val context = LocalContext.current
