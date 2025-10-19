@@ -65,7 +65,7 @@ fun MainScreen(
                     progress = { animatedProgress })
             },
             actions = {
-                Text(text = "${count}/${size.toInt()}")
+                Text(text = "${count}/${size}")
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
