@@ -25,31 +25,30 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlin.math.acos
+import kotlin.math.pow
 
 @Composable
 fun CircularIndicator(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.secondary,
-    trackColor: Color = MaterialTheme.colorScheme.onSecondary,
+    color: Color = MaterialTheme.colorScheme.tertiary,
+    trackColor: Color = MaterialTheme.colorScheme.secondary,
     indicatorSize: Dp = 100.dp,
     indicatorWidth: Float = 100f,
-    gapSize: Float = 0f,
     progress: () -> Float,
     content: @Composable () -> Unit
 ){
     val indicatorProgress = progress()
-    val currProgress = if (indicatorProgress <= 1f) { indicatorProgress * 216 } else {216f}
-    val foregroundWidth = indicatorWidth - gapSize
+    val currProgress = if (indicatorProgress <= 1f) { indicatorProgress * 360 } else {360f}
     Column(modifier = Modifier
         .size(indicatorSize)
         .drawBehind {
-            background(backgroundColor = trackColor, componentSize = size, width = indicatorWidth)
+            background(backgroundColor = trackColor, componentSize = size, width = indicatorWidth, angle = currProgress)
             foreground(
                 foregroundColor = color,
                 componentSize = size,
-                width = foregroundWidth,
+                width = indicatorWidth,
                 angle = currProgress,
-                gapSize = gapSize
             )
         },
         verticalArrangement = Arrangement.Center,
@@ -60,32 +59,36 @@ fun CircularIndicator(
 }
 
 
-fun DrawScope.background(backgroundColor: Color, componentSize: Size, width: Float){
+fun DrawScope.background(backgroundColor: Color, componentSize: Size, width: Float, angle: Float){
+    val backgroundProgress = 360f - angle
+    val gap = width/15
+    //val gap = acos((width*2).pow(2) + componentSize.toString().toFloat().pow(2) * 2)
     drawArc(
         size = size,
         color = backgroundColor,
-        style = Stroke(width = width, cap = StrokeCap.Butt),
+        style = Stroke(width = width, cap = StrokeCap.Round),
         topLeft = Offset(
             x = (size.width - componentSize.width) / 2f,
             y = (size.height - componentSize.height) / 2f
         ),
-        startAngle = 72f + 90f,
-        sweepAngle = 216f,
+        startAngle = -90f + angle/2 + gap,
+        sweepAngle = backgroundProgress - gap * 2,
         useCenter = false
     )
 }
 
-fun DrawScope.foreground(foregroundColor: Color, componentSize: Size, width: Float, angle: Float, gapSize: Float){
+fun DrawScope.foreground(foregroundColor: Color, componentSize: Size, width: Float, angle: Float){
+    val gap = width/15
     drawArc(
         size = size,
         color = foregroundColor,
-        style = Stroke(width = width, cap = StrokeCap.Butt, join = StrokeJoin.Miter, miter = 0.1f),
+        style = Stroke(width = width, cap = StrokeCap.Round, join = StrokeJoin.Miter, miter = 0.1f),
         topLeft = Offset(
             x = (size.width - componentSize.width) / 2f,
             y = (size.height - componentSize.height) / 2f
         ),
-        startAngle = 72f + 90f + gapSize/20,
-        sweepAngle = angle - gapSize/20,
+        startAngle = -90f + angle/2 - gap,
+        sweepAngle = -angle + gap * 2,
         useCenter = false
     )
 
@@ -96,7 +99,7 @@ fun DrawScope.foreground(foregroundColor: Color, componentSize: Size, width: Flo
 @Composable
 fun test(){
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        CircularIndicator(progress = {0.5f}, indicatorSize = 200.dp, gapSize = 20f){
+        CircularIndicator(progress = {0.5f}, indicatorSize = 200.dp, indicatorWidth = 50f){
             Text("zalupa")
         }
     }

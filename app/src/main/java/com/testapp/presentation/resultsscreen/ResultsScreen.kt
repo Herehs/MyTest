@@ -52,9 +52,8 @@ fun ResultsScreen(vm: TestViewModel){
             color = MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.onPrimary,
             progress = {animatedProgress},
-            gapSize = 20f,
             indicatorSize = 300.dp,
-            indicatorWidth = 150f
+            indicatorWidth = 50f
         ){
             Text("${correctAnswersCount}/${size}", style = MaterialTheme.typography.headlineLarge)
         }
