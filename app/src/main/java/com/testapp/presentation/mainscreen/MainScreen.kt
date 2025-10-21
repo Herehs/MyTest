@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.testapp.vm.TestViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,30 +38,28 @@ fun MainScreen(
     vm: TestViewModel,
     goToResultScreen: () -> Unit
 ) {
+    val count by vm.count.collectAsState()
+    val quiz by vm.quiz.collectAsState()
+    val size = quiz.questions.size
     val context = LocalContext.current
+    val userSelected by vm.userSelected.collectAsState()
     LaunchedEffect(Unit) {
         vm.loadQuestions(context)
     }
-    val count by vm.count.collectAsState()
-    val quiz by vm.quiz.collectAsState()
-
-    val size = quiz.questions.size
-
-
-
 
     Scaffold(topBar = {
         val animatedProgress by animateFloatAsState(
             targetValue = count.toFloat()/size,
             animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
         )
-
         CenterAlignedTopAppBar(
             modifier = Modifier,
             title = {
-                LinearProgressIndicator(color = MaterialTheme.colorScheme.primary,
+                LinearProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
                     trackColor = MaterialTheme.colorScheme.onPrimary,
-                    progress = { animatedProgress })
+                    progress = { animatedProgress }
+                )
             },
             actions = {
                 Text(text = "${count}/${size}")
@@ -91,8 +88,6 @@ fun MainScreen(
         }
     }, floatingActionButtonPosition = FabPosition.Center
     ){ innerPadding ->
-
-        val userSelected by vm.userSelected.collectAsState()
 
         LazyColumn(modifier = Modifier
             .fillMaxSize()

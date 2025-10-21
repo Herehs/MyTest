@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -25,8 +22,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlin.math.acos
-import kotlin.math.pow
 
 @Composable
 fun CircularIndicator(
@@ -39,7 +34,7 @@ fun CircularIndicator(
     content: @Composable () -> Unit
 ){
     val indicatorProgress = progress()
-    val currProgress = if (indicatorProgress <= 1f) { indicatorProgress * 360 } else {360f}
+    val currProgress = if (indicatorProgress < 1f) { indicatorProgress * 360 } else {indicatorProgress * 380}
     Column(modifier = Modifier
         .size(indicatorSize)
         .drawBehind {
@@ -60,8 +55,14 @@ fun CircularIndicator(
 
 
 fun DrawScope.background(backgroundColor: Color, componentSize: Size, width: Float, angle: Float){
-    val backgroundProgress = 360f - angle
     val gap = width/15
+    val backgroundProgress = if(angle == 0f){
+        370f
+    }
+    else{
+        360f - angle
+    }
+
     //val gap = acos((width*2).pow(2) + componentSize.toString().toFloat().pow(2) * 2)
     drawArc(
         size = size,
@@ -79,27 +80,28 @@ fun DrawScope.background(backgroundColor: Color, componentSize: Size, width: Flo
 
 fun DrawScope.foreground(foregroundColor: Color, componentSize: Size, width: Float, angle: Float){
     val gap = width/15
-    drawArc(
-        size = size,
-        color = foregroundColor,
-        style = Stroke(width = width, cap = StrokeCap.Round, join = StrokeJoin.Miter, miter = 0.1f),
-        topLeft = Offset(
-            x = (size.width - componentSize.width) / 2f,
-            y = (size.height - componentSize.height) / 2f
-        ),
-        startAngle = -90f + angle/2 - gap,
-        sweepAngle = -angle + gap * 2,
-        useCenter = false
-    )
-
+    if(angle != 0f){
+        drawArc(
+            size = size,
+            color = foregroundColor,
+            style = Stroke(width = width, cap = StrokeCap.Round, join = StrokeJoin.Miter, miter = 0.1f),
+            topLeft = Offset(
+                x = (size.width - componentSize.width) / 2f,
+                y = (size.height - componentSize.height) / 2f
+            ),
+            startAngle = -90f + angle/2 - gap,
+            sweepAngle = -angle + gap * 2,
+            useCenter = false
+        )
+    }
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun test(){
+fun Test(){
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        CircularIndicator(progress = {0.5f}, indicatorSize = 200.dp, indicatorWidth = 50f){
+        CircularIndicator(progress = {0f}, indicatorSize = 200.dp, indicatorWidth = 50f){
             Text("zalupa")
         }
     }
