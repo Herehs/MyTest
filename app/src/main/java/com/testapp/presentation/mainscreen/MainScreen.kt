@@ -43,9 +43,6 @@ fun MainScreen(
     val size = quiz.questions.size
     val context = LocalContext.current
     val userSelected by vm.userSelected.collectAsState()
-    LaunchedEffect(Unit) {
-        vm.loadQuestions(context)
-    }
 
     Scaffold(topBar = {
         val animatedProgress by animateFloatAsState(
@@ -53,7 +50,6 @@ fun MainScreen(
             animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
         )
         CenterAlignedTopAppBar(
-            modifier = Modifier,
             title = {
                 LinearProgressIndicator(
                     color = MaterialTheme.colorScheme.primary,

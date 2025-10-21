@@ -20,7 +20,8 @@ fun NavRoot(vm: TestViewModel) {
         startDestination = UploadScreenUi
     ) {
         composable<UploadScreenUi> {
-            UploadScreen(goToMainScreen = {
+            UploadScreen(vm = vm,
+                goToMainScreen = {
                 navController.navigate(MainScreenUi)
             })
         }

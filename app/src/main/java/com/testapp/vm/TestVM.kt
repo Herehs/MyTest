@@ -43,6 +43,15 @@ class TestViewModel(): ViewModel(){
         }
     }
 
+    fun LoadUserQuestions(test: String){
+        val newQuiz = parseQuestions(test)
+        _quiz.update {
+            it.copy(
+                questions = newQuiz.questions
+            )
+        }
+    }
+
     fun onAnswerSelected(questionId: Int, answer: String){
         println("onAnswerSelected called — questionId=$questionId, answer=$answer")
         val currAnswers = _userSelected.value.toMap()
