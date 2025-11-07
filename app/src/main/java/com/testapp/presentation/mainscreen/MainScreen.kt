@@ -22,12 +22,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.testapp.vm.TestViewModel
 
@@ -41,7 +39,6 @@ fun MainScreen(
     val count by vm.count.collectAsState()
     val quiz by vm.quiz.collectAsState()
     val size = quiz.questions.size
-    val context = LocalContext.current
     val userSelected by vm.userSelected.collectAsState()
 
     Scaffold(topBar = {
@@ -58,7 +55,9 @@ fun MainScreen(
                 )
             },
             actions = {
-                Text(text = "${count}/${size}")
+                Text(modifier = Modifier.padding(end = 16.dp),
+                    text = "${count}/${size}"
+                )
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,

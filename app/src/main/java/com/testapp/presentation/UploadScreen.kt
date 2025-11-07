@@ -1,6 +1,5 @@
 package com.testapp.presentation
 
-import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -11,14 +10,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.testapp.vm.TestViewModel
+
 
 @Composable
 fun UploadScreen(vm: TestViewModel ,goToMainScreen: () -> Unit){
@@ -33,7 +29,7 @@ fun UploadScreen(vm: TestViewModel ,goToMainScreen: () -> Unit){
                         val text = inputStream.bufferedReader().use { reader ->
                             reader.readText()
                         }
-                        vm.LoadUserQuestions(text)
+                        vm.loadUserQuestions(text)
                     }
                 }catch (e: Exception){
                     e.printStackTrace()

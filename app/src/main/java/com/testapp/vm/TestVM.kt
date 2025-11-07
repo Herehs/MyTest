@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class TestViewModel(): ViewModel(){
+class  TestViewModel(): ViewModel(){
 
     private val _count = MutableStateFlow<Int>(0)
     val count: StateFlow<Int> = _count.asStateFlow()
@@ -43,7 +43,7 @@ class TestViewModel(): ViewModel(){
         }
     }
 
-    fun LoadUserQuestions(test: String){
+    fun loadUserQuestions(test: String){
         val newQuiz = parseQuestions(test)
         _quiz.update {
             it.copy(

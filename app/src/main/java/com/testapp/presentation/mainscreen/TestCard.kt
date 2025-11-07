@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.testapp.presentation.customcomponent.PixelatedRadioButton
 import com.testapp.util.Question
 
 @Composable
@@ -67,7 +68,7 @@ fun TestCard(
                     ,
                     verticalAlignment = Alignment.CenterVertically,
                 ){
-                    RadioButton(
+                    PixelatedRadioButton(
                         modifier = Modifier.padding(end = 8.dp),
                         selected = (isSelected),
                         onClick = {
